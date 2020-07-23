@@ -1,11 +1,10 @@
-@import '~antd/dist/antd.css';
 @import '../mixins';
 
-.timer {
+.pomodoro__timer {
   @include flex-content;
   flex-direction: column;
 
-  button {
+  &__buttons {
     @include flex-content;
   }
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Timer } from './components/Timer';
+import { Timer } from './pages/Timer';
 
-import './scss/components/_app.scss';
+import './scss/_app.scss';
 
 export const App: React.FC = () => {
   return (
