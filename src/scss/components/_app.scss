@@ -1,0 +1,13 @@
+@import '../mixins';
+
+.app {
+  @include flex-content;
+  border-radius: 26px;
+  background: #eeeeee;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+
+  button {
+    margin: 0.3rem 0.5rem;
+  }
+}
