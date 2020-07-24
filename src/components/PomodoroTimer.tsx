@@ -1,20 +1,25 @@
 import React from 'react';
 
-import { Modal } from 'antd';
-import { Button, TimerText } from '../styles';
+import { Button, TimerText, StyledText } from '../styles';
 import '../scss/components/_pomodoro_timer.scss';
+
+interface IProps {
+  taskOutput: string[];
+  initialTime: string,
+}
 
 let interval: any;
 
-export const PomodoroTimer: React.FC = () => {
-  const [ firstTimer, setFirstTimer ] = React.useState<string>('25');
+export const PomodoroTimer: React.FC<IProps> = ({
+  taskOutput,
+  initialTime,
+}) => {
   const [ secondTimer, setSecondTimer ] = React.useState<string>('00');
-  const [ showModal, setShowModal ] = React.useState<boolean>(false);
+  const [ countdown, setCountdown ] = React.useState<string>(initialTime);
 
   const startTimer: Function = (): void => {
-    let newFirstTimer: any = firstTimer;
+    let newFirstTimer: any = countdown;
     let newSecondTimer: any = secondTimer;
-    const displayModal: boolean = !showModal;
 
     if (newFirstTimer !== '0') {
       interval = setInterval(() => {
@@ -22,7 +27,7 @@ export const PomodoroTimer: React.FC = () => {
           newFirstTimer = newFirstTimer - 1;
           newSecondTimer = '59';
 
-          setFirstTimer(newFirstTimer);
+          setCountdown(newFirstTimer);
           setSecondTimer(newSecondTimer);
         } else if (newSecondTimer !== '00') {
           newSecondTimer = newSecondTimer - 1;
@@ -31,11 +36,7 @@ export const PomodoroTimer: React.FC = () => {
             newSecondTimer = `0${newSecondTimer}`;
           }
 
-          if (newFirstTimer === +'0' && newSecondTimer === '00') {
-            setShowModal(displayModal);
-          }
-
-          setFirstTimer(newFirstTimer);
+          setCountdown(newFirstTimer);
           setSecondTimer(newSecondTimer);
         }
       }, 50);
@@ -44,30 +45,24 @@ export const PomodoroTimer: React.FC = () => {
     }
   }
 
-  const stopTimer: Function = (): void => clearInterval(interval);
-
   const resetTimer: Function = (): void => {
-    setFirstTimer('25');
+    setCountdown(initialTime);
     setSecondTimer('00');
     clearInterval(interval);
   }
 
-  const hideModalHandler: any = (): void => {
-    setFirstTimer('25');
-    setSecondTimer('00');
-    setShowModal(false);
-  }
+  const stopTimer: Function = (): void => clearInterval(interval);
 
   return (
     <div className="pomodoro__timer">
-      <TimerText>{ firstTimer }:{ secondTimer }</TimerText>
+      <TimerText>{ countdown }:{ secondTimer }</TimerText>
 
       <div className="timer__buttons">
         <Button onClick={stopTimer}>
           Stop
         </Button>
 
-        <Button success="true" large="true" onClick={startTimer}>
+        <Button primary="true" large="true" onClick={startTimer}>
           Start
         </Button>
 
@@ -76,14 +71,13 @@ export const PomodoroTimer: React.FC = () => {
         </Button>
       </div>
 
-      <Modal
-        title="Pomodoro time is over"
-        visible={showModal}
-        onOk={hideModalHandler}
-        onCancel={hideModalHandler}
-      >
-        <TimerText></TimerText>
-      </Modal>
+      <div className="your-task">
+        <StyledText large="true">Your task</StyledText>
+        {
+          taskOutput?.map((task: string, i: number) =>
+            <StyledText key={i}>{ task ?? '' }</StyledText>)
+        }
+      </div>
     </div>
   );
 }

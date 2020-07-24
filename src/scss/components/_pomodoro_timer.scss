@@ -7,4 +7,9 @@
   &__buttons {
     @include flex-content;
   }
+
+  .your-task {
+    @include flex-content;
+    flex-direction: column;
+  }
 }
