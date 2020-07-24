@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { PomodoroTimer } from '../components/PomodoroTimer';
-import { Task } from '../components/Task';
+import { PomodoroTask } from '../components/PomodoroTask';
 
 const chooseTime = [ '5', '10', '15', '20', '25' ];
 const chooseBreak = [ '5', '10', '30' ];
@@ -21,7 +21,7 @@ export const Timer: React.FC = () => {
             userBreak={userBreak}
             setWriteableTask={setWriteableTask}
           />)
-        : (<Task
+        : (<PomodoroTask
             chooseTime={chooseTime}
             chooseBreak={chooseBreak}
             taskOutput={taskOutput}

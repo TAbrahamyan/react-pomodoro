@@ -3,9 +3,9 @@ import React from 'react';
 import { ITask } from '../interfaces';
 import { Button, Input, StyledText } from '../styles';
 
-import '../scss/components/_task.scss';
+import '../scss/components/_pomodoro_task.scss';
 
-export const Task: React.FC<ITask> = ({
+export const PomodoroTask: React.FC<ITask> = ({
   chooseTime,
   chooseBreak,
   taskOutput,
@@ -42,7 +42,7 @@ export const Task: React.FC<ITask> = ({
 
   return (
     <div className="pomodoro__task">
-      <StyledText large="true">
+      <StyledText large="true" bold="true">
         Write a task you want to focus on
       </StyledText>
 
@@ -60,16 +60,18 @@ export const Task: React.FC<ITask> = ({
       </div>
 
       { taskWrited &&
-        <div className='task-content'>
-          <StyledText>
-            Choose how many minutes you want to focus
-          </StyledText>
+        <>
+          <div className="task-content">
+            <StyledText>
+              Choose how many minutes you want to focus
+            </StyledText>
 
-          <div className="choose-time">
-            {
-              chooseTime?.map((time: string, i: number) =>
-                <StyledText key={i} large="true" onClick={chooseTimeHandler}>{ time ?? '' }</StyledText>)
-            }
+            <div className="choose-time">
+              {
+                chooseTime?.map((time: string, i: number) =>
+                  <StyledText key={i} large="true" onClick={chooseTimeHandler}>{ time ?? '' }</StyledText>)
+              }
+            </div>
           </div>
 
           { chooseInitialTime &&
@@ -86,7 +88,7 @@ export const Task: React.FC<ITask> = ({
               </div>
             </div>
           }
-        </div>
+        </>
       }
     </div>
   );

@@ -18,3 +18,14 @@ export interface IPomodoroTask {
   setWriteableTask: Function,
 }
 // Pomodoro Task interface
+
+// Pomodoro modal interface
+export interface IPomodoroModal {
+  setWriteableTask: Function,
+  countdownUserBreak: string,
+  setCountdownUserBreak: Function,
+  secondTimer: string,
+  setSecondTimer: Function,
+  showBreakTime: boolean,
+}
+// Pomodoro modal interface

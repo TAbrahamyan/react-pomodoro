@@ -1,13 +1,12 @@
 import React from 'react';
 
+import { PomodoroBreak } from './PomodoroBreak';
 import { IPomodoroTask } from '../interfaces';
 import { Button, TimerText, StyledText } from '../styles';
 
-import { Modal } from 'antd';
 import '../scss/components/_pomodoro_timer.scss';
 
 let initialTimeinterval: any;
-let userBreakInterval: any;
 
 export const PomodoroTimer: React.FC<IPomodoroTask> = ({
   taskOutput,
@@ -16,14 +15,12 @@ export const PomodoroTimer: React.FC<IPomodoroTask> = ({
   setWriteableTask,
 }) => {
   const [ secondTimer, setSecondTimer ] = React.useState<string>('00');
-  const [ breakSecondTimer, setBreakSecondTimer ] = React.useState<string>('00');
   const [ countdownInitialTime, setCountdownInitialTime ] = React.useState<string>(initialTime);
   const [ countdownUserBreak, setCountdownUserBreak ] = React.useState<string>(userBreak);
   const [ disabledStartButton, setDisabledStartButton ] = React.useState<boolean>(false);
   const [ showBreakTime, setShowBreakTime ] = React.useState<boolean>(false);
-  const [ visibleModal, setVisibleModal ] = React.useState<boolean>(false);
 
-  const startTimer: Function = (): void => {
+  const startTimerHandler: Function = (): void => {
     let newInitialTime: any = countdownInitialTime;
     let newSecondTime: any = secondTimer;
 
@@ -50,54 +47,20 @@ export const PomodoroTimer: React.FC<IPomodoroTask> = ({
           clearInterval(initialTimeinterval);
           setShowBreakTime(true);
         }
-      }, 1);
+      }, 1000);
     }
   }
 
-  React.useEffect(() => {
-    let newUserBreakTime: any = countdownUserBreak;
-    let newSecondBreakTime: any = breakSecondTimer;
-
-    if (newUserBreakTime !== '0' && showBreakTime === true) {
-      userBreakInterval = setInterval(() => {
-        if (newUserBreakTime !== +'0' && newSecondBreakTime === '00') {
-          newUserBreakTime = newUserBreakTime - 1;
-          newSecondBreakTime = '59';
-
-          setCountdownUserBreak(newUserBreakTime);
-          setBreakSecondTimer(newSecondBreakTime);
-        } else if (newSecondBreakTime !== '00') {
-          newSecondBreakTime = newSecondBreakTime - 1;
-
-          if (newSecondBreakTime < '10') {
-            newSecondBreakTime = `0${newSecondBreakTime}`;
-          }
-
-          setCountdownUserBreak(newUserBreakTime);
-          setBreakSecondTimer(newSecondBreakTime);
-        } else {
-          clearInterval(userBreakInterval);
-          setVisibleModal(true);
-        }
-      }, 1);
-    }
-  }, [ showBreakTime ]);
-
-  const resetTimer: Function = (): void => {
+  const resetTimerHandler: Function = (): void => {
     setCountdownInitialTime(initialTime);
     setSecondTimer('00');
     setDisabledStartButton(false);
     clearInterval(initialTimeinterval);
   }
 
-  const stopTimer: Function = (): void => {
+  const stopTimerHandler: Function = (): void => {
     setDisabledStartButton(false);
     clearInterval(initialTimeinterval);
-  };
-
-  const hideModalHandler: any = (): void => {
-    setVisibleModal(false);
-    setWriteableTask(false);
   };
 
   return (
@@ -107,7 +70,7 @@ export const PomodoroTimer: React.FC<IPomodoroTask> = ({
           ? <TimerText>{ countdownInitialTime }:{ secondTimer }</TimerText>
           : (<div>
               <StyledText>Your break started!</StyledText>
-              <TimerText>{ countdownUserBreak }:{ breakSecondTimer }</TimerText>
+              <TimerText>{ countdownUserBreak }:{ secondTimer }</TimerText>
             </div>)
         }
       </div>
@@ -115,15 +78,15 @@ export const PomodoroTimer: React.FC<IPomodoroTask> = ({
       { !showBreakTime &&
         <>
           <div className="timer__buttons">
-            <Button onClick={stopTimer}>
+            <Button onClick={stopTimerHandler}>
               Stop
             </Button>
 
-            <Button primary="true" large="true" onClick={startTimer} disabled={disabledStartButton}>
+            <Button primary="true" large="true" onClick={startTimerHandler} disabled={disabledStartButton}>
               Start
             </Button>
 
-            <Button onClick={resetTimer}>
+            <Button onClick={resetTimerHandler}>
               Reset
             </Button>
           </div>
@@ -139,16 +102,14 @@ export const PomodoroTimer: React.FC<IPomodoroTask> = ({
         </>
       }
 
-      <Modal
-        visible={visibleModal}
-        maskClosable={false}
-        onOk={hideModalHandler}
-        cancelButtonProps={{ style: { display: 'none' } }}
-        closable={false}
-      >
-        <StyledText bold="true" color="true" large="true">Break is over</StyledText>
-        <StyledText color="true">Set a new task</StyledText>
-      </Modal>
+      <PomodoroBreak
+        setWriteableTask={setWriteableTask}
+        countdownUserBreak={countdownUserBreak}
+        setCountdownUserBreak={setCountdownUserBreak}
+        secondTimer={secondTimer}
+        setSecondTimer={setSecondTimer}
+        showBreakTime={showBreakTime}
+      />
     </div>
   );
 }

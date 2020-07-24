@@ -1,12 +1,12 @@
 @import '../mixins';
+@import '../variables';
 
 .pomodoro__timer {
-  @include flex-content;
-  flex-direction: column;
-  animation: fadeInFromNone 0.5s ease-out;
-  transform: translateY(20px);
-
   @include easeOutAnimation;
+  @include flex-content;
+  flex-direction: $flexColumn;
+
+  @include easeOutKeyframes;
 
   &__buttons {
     @include flex-content;
@@ -14,6 +14,6 @@
 
   .your-task {
     @include flex-content;
-    flex-direction: column;
+    flex-direction: $flexColumn;
   }
 }

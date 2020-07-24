@@ -1,0 +1,41 @@
+@import '../mixins';
+@import '../variables';
+
+.pomodoro__task {
+  @include flex-content;
+  flex-direction: $flexColumn;
+
+  input {
+    &:active {
+      transform: translateY(6px);;
+    }
+  }
+
+  button {
+    width: $fullWidth;
+    margin: $defaultMargin 0;
+    border-radius: 25px;
+  }
+
+  article {
+    margin: $defaultMargin;
+  }
+
+  .task-content {
+    @include easeOutAnimation;
+    @include easeOutKeyframes;
+
+    .choose-time {
+      @include flex-content;
+    }
+  }
+
+  .break-content {
+    @include easeOutAnimation;
+    @include easeOutKeyframes;
+
+    .choose-break {
+      @include flex-content;
+    }
+  }
+}

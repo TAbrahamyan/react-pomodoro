@@ -5,13 +5,13 @@
   background: #DB7192;
   box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
   padding: 1rem;
-  height: 100vh;
+  height: $vhHeight;
 
   button {
     position: relative;
     overflow: hidden;
     z-index: 1;
-    transition: color 150ms ease-in-out;
+    transition: color $easeOutAnimation;
 
     &:active {
       transform: translateY(4px);
@@ -20,22 +20,22 @@
     &:after {
       content: '';
       position: absolute;
-      display: block;
+      display: $displayBlock;
       top: 0;
       left: 50%;
       transform: translateX(-50%);
       width: 0;
-      height: 100%;
+      height: $vhHeight;
       background: #1ABD9C;
       z-index: -1;
-      transition: width 150ms ease-in-out;
+      transition: width $easeOutAnimation;
     }
 
     &:hover {
       color: #fff;
 
       &:after {
-        width: 100%;
+        width: $fullWidth;
       }
     }
   }
