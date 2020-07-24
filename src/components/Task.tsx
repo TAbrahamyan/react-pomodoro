@@ -1,26 +1,23 @@
 import React from 'react';
 
+import { ITask } from '../interfaces';
 import { Button, Input, StyledText } from '../styles';
+
 import '../scss/components/_task.scss';
 
-interface IProps {
-  selectedTime: string[],
-  taskOutput: string[],
-  setTaskOutput: Function,
-  setWriteableTask: Function,
-  setInitialTime: Function,
-}
-
-export const Task: React.FC<IProps> = ({
-  selectedTime,
+export const Task: React.FC<ITask> = ({
+  chooseTime,
+  chooseBreak,
   taskOutput,
   setTaskOutput,
   setWriteableTask,
   setInitialTime,
+  setUserBreak,
 }) => {
   const [ taskInput, setTaskInput ] = React.useState<string>('');
-  const [ taskWrited, setTaskWrite ] = React.useState<boolean>(false);
+  const [ taskWrited, setTaskWrited ] = React.useState<boolean>(false);
   const [ inputDisabled, setInputDisabled ] = React.useState<boolean>(false);
+  const [ chooseInitialTime, setChooseInitialTime ] = React.useState<boolean>(false);
 
   const addTaskHandler: Function = (): void => {
     if (!taskInput.trim()) {
@@ -29,12 +26,17 @@ export const Task: React.FC<IProps> = ({
 
     setTaskOutput([ ...taskOutput, taskInput ]);
     setTaskInput('');
-    setTaskWrite(true);
+    setTaskWrited(true);
     setInputDisabled(true);
   }
 
-  const selectedTimeHandler: Function = ({ target: { textContent: t } }: any): void => {
+  const chooseTimeHandler: Function = ({ target: { textContent: t } }: any): void => {
     setInitialTime(t);
+    setChooseInitialTime(true);
+  }
+
+  const chooseBreakHandlder: Function = ({ target: { textContent: t } }: any): void => {
+    setUserBreak(t);
     setWriteableTask(true);
   }
 
@@ -58,17 +60,32 @@ export const Task: React.FC<IProps> = ({
       </div>
 
       { taskWrited &&
-        <div>
-          <StyledText style={{ marginTop: '2rem' }}>
+        <div className='task-content'>
+          <StyledText>
             Choose how many minutes you want to focus
           </StyledText>
 
-          <div className="select-time">
+          <div className="choose-time">
             {
-              selectedTime?.map((time: string, i: number) =>
-                <StyledText key={i} large="true" onClick={selectedTimeHandler}>{ time ?? '' }</StyledText>)
+              chooseTime?.map((time: string, i: number) =>
+                <StyledText key={i} large="true" onClick={chooseTimeHandler}>{ time ?? '' }</StyledText>)
             }
           </div>
+
+          { chooseInitialTime &&
+            <div className="break-content">
+              <StyledText>
+                Choose break
+              </StyledText>
+
+              <div className="choose-break">
+                {
+                  chooseBreak?.map((userBreak: string, i: number) =>
+                    <StyledText key={i} onClick={chooseBreakHandlder}>{ userBreak }</StyledText>)
+                }
+              </div>
+            </div>
+          }
         </div>
       }
     </div>

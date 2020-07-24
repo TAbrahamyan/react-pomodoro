@@ -3,6 +3,10 @@
 .pomodoro__timer {
   @include flex-content;
   flex-direction: column;
+  animation: fadeInFromNone 0.5s ease-out;
+  transform: translateY(20px);
+
+  @include easeOutAnimation;
 
   &__buttons {
     @include flex-content;

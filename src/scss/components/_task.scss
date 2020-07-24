@@ -16,11 +16,37 @@
     border-radius: 25px;
   }
 
-  .select-time {
-    @include flex-content;
+  .task-content {
+    animation: fadeInFromNone 0.5s ease-out;
+    transform: translateY(20px);
+
+    @include easeOutAnimation;
 
     article {
-      margin: 2rem 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .choose-time {
+      @include flex-content;
+
+      article {
+        margin: 0.5rem 1rem;
+      }
+    }
+
+    .break-content {
+      animation: fadeInFromNone 0.5s ease-out;
+      transform: translateY(20px);
+
+      @include easeOutAnimation;
+
+      .choose-break {
+        @include flex-content;
+
+        article {
+          margin: 0.5rem 1rem;
+        }
+      }
     }
   }
 }
