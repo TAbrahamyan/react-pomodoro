@@ -15,6 +15,7 @@ export const PomodoroTask: React.FC<ITask> = ({
   setUserBreak,
 }) => {
   const [ taskInput, setTaskInput ] = React.useState<string>('');
+  const [ customTime, setCustomTime ] = React.useState<string>('');
   const [ taskWrited, setTaskWrited ] = React.useState<boolean>(false);
   const [ inputDisabled, setInputDisabled ] = React.useState<boolean>(false);
   const [ chooseInitialTime, setChooseInitialTime ] = React.useState<boolean>(false);
@@ -32,6 +33,18 @@ export const PomodoroTask: React.FC<ITask> = ({
 
   const chooseTimeHandler: Function = ({ target: { textContent: t } }: any): void => {
     setInitialTime(t);
+    setChooseInitialTime(true);
+  }
+
+  const customTimeHandler: Function = ({ target: { value: v } }: any): void => {
+    if (v.match(/\D/g) || v.length > 2 || v > '25') {
+      return;
+    }
+
+    const replacedText = v.replace(/\D/g, '');
+
+    setCustomTime(replacedText);
+    setInitialTime(replacedText);
     setChooseInitialTime(true);
   }
 
@@ -71,19 +84,24 @@ export const PomodoroTask: React.FC<ITask> = ({
                 chooseTime?.map((time: string, i: number) =>
                   <StyledText key={i} large="true" onClick={chooseTimeHandler}>{ time ?? '' }</StyledText>)
               }
+              <Input
+                placeholder="Custom"
+                value={customTime}
+                onChange={customTimeHandler}
+              />
             </div>
           </div>
 
           { chooseInitialTime &&
             <div className="break-content">
               <StyledText>
-                Choose break
+                Choose minutes of break
               </StyledText>
 
               <div className="choose-break">
                 {
                   chooseBreak?.map((userBreak: string, i: number) =>
-                    <StyledText key={i} onClick={chooseBreakHandlder}>{ userBreak }</StyledText>)
+                    <StyledText key={i} onClick={chooseBreakHandlder}>{ userBreak ?? '' }</StyledText>)
                 }
               </div>
             </div>

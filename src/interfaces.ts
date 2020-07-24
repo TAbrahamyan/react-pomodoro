@@ -20,7 +20,7 @@ export interface IPomodoroTask {
 // Pomodoro Task interface
 
 // Pomodoro modal interface
-export interface IPomodoroModal {
+export interface IPomodoroBreak {
   setWriteableTask: Function,
   countdownUserBreak: string,
   setCountdownUserBreak: Function,

@@ -47,7 +47,7 @@ export const PomodoroTimer: React.FC<IPomodoroTask> = ({
           clearInterval(initialTimeinterval);
           setShowBreakTime(true);
         }
-      }, 1000);
+      }, 1);
     }
   }
 

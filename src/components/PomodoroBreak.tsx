@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { IPomodoroModal } from '../interfaces';
+import { IPomodoroBreak } from '../interfaces';
 import { StyledText } from '../styles';
 
 import { Modal } from 'antd';
 
 let userBreakInterval: any;
 
-export const PomodoroBreak: React.FC<IPomodoroModal> = ({
+export const PomodoroBreak: React.FC<IPomodoroBreak> = ({
   setWriteableTask,
   countdownUserBreak,
   setCountdownUserBreak,
@@ -47,7 +47,7 @@ export const PomodoroBreak: React.FC<IPomodoroModal> = ({
           clearInterval(userBreakInterval);
           setVisibleModal(true);
         }
-      }, 1000);
+      }, 1);
     }
   }, [ showBreakTime ]);
 
