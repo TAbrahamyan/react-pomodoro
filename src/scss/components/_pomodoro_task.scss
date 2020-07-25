@@ -2,14 +2,10 @@
 @import '../variables';
 
 .pomodoro__task {
-  @include flex-content;
   flex-direction: $flexColumn;
-
-  input {
-    &:active {
-      transform: translateY(6px);;
-    }
-  }
+  @include flex-content;
+  @include easeOutAnimation;
+  @include easeOutKeyframes;
 
   button {
     width: $fullWidth;
@@ -19,6 +15,15 @@
 
   article {
     margin: $defaultMargin;
+  }
+
+  .pomodoro-count {
+    @include easeOutAnimation;
+    @include easeOutKeyframes;
+
+    .choose-pomodoro-count {
+      @include flex-content;
+    }
   }
 
   .task-content {

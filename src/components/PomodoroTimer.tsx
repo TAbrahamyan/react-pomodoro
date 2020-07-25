@@ -1,18 +1,21 @@
 import React from 'react';
 
 import { PomodoroBreak } from './PomodoroBreak';
-import { IPomodoroTask } from '../interfaces';
+import { IPomodoroTimer } from '../interfaces';
 import { Button, TimerText, StyledText } from '../styles';
 
+import { FieldTimeOutlined } from '@ant-design/icons';
 import '../scss/components/_pomodoro_timer.scss';
 
 let initialTimeinterval: any;
 
-export const PomodoroTimer: React.FC<IPomodoroTask> = ({
+export const PomodoroTimer: React.FC<IPomodoroTimer> = ({
   taskOutput,
   initialTime,
   userBreak,
   setWriteableTask,
+  setPomodoroCount,
+  pomodoroCount,
 }) => {
   const [ secondTimer, setSecondTimer ] = React.useState<string>('00');
   const [ countdownInitialTime, setCountdownInitialTime ] = React.useState<string>(initialTime);
@@ -26,16 +29,16 @@ export const PomodoroTimer: React.FC<IPomodoroTask> = ({
 
     setDisabledStartButton(true);
 
-    if (newInitialTime !== '0' && showBreakTime === false) {
+    if (newInitialTime !== '0' && !showBreakTime) {
       initialTimeinterval = setInterval(() => {
         if (newInitialTime !== +'0' && newSecondTime === '00') {
-          newInitialTime = newInitialTime - 1;
+          newInitialTime -= 1;
           newSecondTime = '59';
 
           setCountdownInitialTime(newInitialTime);
           setSecondTimer(newSecondTime);
         } else if (newSecondTime !== '00') {
-          newSecondTime = newSecondTime - 1;
+          newSecondTime -= 1;
 
           if (newSecondTime < '10') {
             newSecondTime = `0${newSecondTime}`;
@@ -44,10 +47,16 @@ export const PomodoroTimer: React.FC<IPomodoroTask> = ({
           setCountdownInitialTime(newInitialTime);
           setSecondTimer(newSecondTime);
         } else {
-          clearInterval(initialTimeinterval);
+          if (pomodoroCount !== 0) {
+            pomodoroCount -= 1;
+            setPomodoroCount(pomodoroCount);
+            clearInterval(initialTimeinterval);
+          }
+
+          setCountdownUserBreak(userBreak);
           setShowBreakTime(true);
         }
-      }, 1);
+      }, 1000);
     }
   }
 
@@ -65,51 +74,53 @@ export const PomodoroTimer: React.FC<IPomodoroTask> = ({
 
   return (
     <div className="pomodoro__timer">
-      <div style={{ display: 'flex' }}>
-        { !showBreakTime
-          ? <TimerText>{ countdownInitialTime }:{ secondTimer }</TimerText>
-          : (<div>
-              <StyledText>Your break started!</StyledText>
-              <TimerText>{ countdownUserBreak }:{ secondTimer }</TimerText>
-            </div>)
-        }
-      </div>
+      { !showBreakTime
+        ? <>
+            <div>
+              <TimerText>{ countdownInitialTime }:{ secondTimer }</TimerText>
+              <StyledText style={{ margin: '1rem' }} large="true">
+                { pomodoroCount }
+                <FieldTimeOutlined style={{ color: '#FADB14' }} />
+              </StyledText>
+            </div>
 
-      { !showBreakTime &&
-        <>
-          <div className="timer__buttons">
-            <Button onClick={stopTimerHandler}>
-              Stop
-            </Button>
+            <div className="timer__buttons">
+              <Button onClick={stopTimerHandler}>
+                Stop
+              </Button>
 
-            <Button primary="true" large="true" onClick={startTimerHandler} disabled={disabledStartButton}>
-              Start
-            </Button>
+              <Button primary="true" large="true" onClick={startTimerHandler} disabled={disabledStartButton}>
+                Start
+              </Button>
 
-            <Button onClick={resetTimerHandler}>
-              Reset
-            </Button>
-          </div>
+              <Button onClick={resetTimerHandler}>
+                Reset
+              </Button>
+            </div>
 
-          <div className="your-task">
-            <StyledText large="true">Your task</StyledText>
+            <div className="your-task">
+              <StyledText large="true">Your task</StyledText>
 
-            {
-              taskOutput?.map((task: string, i: number) =>
-                <StyledText key={i}>{ task ?? '' }</StyledText>)
-            }
-          </div>
-        </>
+              {
+                taskOutput?.map((task: string, i: number) =>
+                  <StyledText key={i}>{ task ?? '' }</StyledText>)
+              }
+            </div>
+          </>
+        : <PomodoroBreak
+            setWriteableTask={setWriteableTask}
+            setDisabledStartButton={setDisabledStartButton}
+            initialTime={initialTime}
+            setCountdownInitialTime={setCountdownInitialTime}
+            countdownUserBreak={countdownUserBreak}
+            setCountdownUserBreak={setCountdownUserBreak}
+            secondTimer={secondTimer}
+            setSecondTimer={setSecondTimer}
+            showBreakTime={showBreakTime}
+            pomodoroCount={pomodoroCount}
+            setShowBreakTime={setShowBreakTime}
+          />
       }
-
-      <PomodoroBreak
-        setWriteableTask={setWriteableTask}
-        countdownUserBreak={countdownUserBreak}
-        setCountdownUserBreak={setCountdownUserBreak}
-        secondTimer={secondTimer}
-        setSecondTimer={setSecondTimer}
-        showBreakTime={showBreakTime}
-      />
     </div>
   );
 }

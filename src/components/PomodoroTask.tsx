@@ -1,11 +1,15 @@
 import React from 'react';
 
-import { ITask } from '../interfaces';
+import { IPomodoroTask } from '../interfaces';
 import { Button, Input, StyledText } from '../styles';
 
+import { Rate } from 'antd';
+import { FieldTimeOutlined } from '@ant-design/icons';
 import '../scss/components/_pomodoro_task.scss';
 
-export const PomodoroTask: React.FC<ITask> = ({
+export const PomodoroTask: React.FC<IPomodoroTask> = ({
+  pomodoroCount,
+  setPomodoroCount,
   chooseTime,
   chooseBreak,
   taskOutput,
@@ -13,12 +17,13 @@ export const PomodoroTask: React.FC<ITask> = ({
   setWriteableTask,
   setInitialTime,
   setUserBreak,
+  initialTime,
 }) => {
   const [ taskInput, setTaskInput ] = React.useState<string>('');
   const [ customTime, setCustomTime ] = React.useState<string>('');
   const [ taskWrited, setTaskWrited ] = React.useState<boolean>(false);
   const [ inputDisabled, setInputDisabled ] = React.useState<boolean>(false);
-  const [ chooseInitialTime, setChooseInitialTime ] = React.useState<boolean>(false);
+  const [ checkPomodoroCount, setCheckPomodoroCount ] = React.useState<boolean>(false);
 
   const addTaskHandler: Function = (): void => {
     if (!taskInput.trim()) {
@@ -31,26 +36,29 @@ export const PomodoroTask: React.FC<ITask> = ({
     setInputDisabled(true);
   }
 
-  const chooseTimeHandler: Function = ({ target: { textContent: t } }: any): void => {
-    setInitialTime(t);
-    setChooseInitialTime(true);
+  const choosePomodoroCountHandler: any = (v: any): void => {
+    setPomodoroCount(v);
+    setCheckPomodoroCount(true);
   }
 
-  const customTimeHandler: Function = ({ target: { value: v } }: any): void => {
-    if (v.match(/\D/g) || v.length > 2 || v > '25') {
-      return;
-    }
-
-    const replacedText = v.replace(/\D/g, '');
-
-    setCustomTime(replacedText);
-    setInitialTime(replacedText);
-    setChooseInitialTime(true);
-  }
+  const chooseTimeHandler: Function = ({ target: { textContent: t } }: any): void => setInitialTime(t);
 
   const chooseBreakHandlder: Function = ({ target: { textContent: t } }: any): void => {
     setUserBreak(t);
     setWriteableTask(true);
+  }
+
+  const customTimeHandler: Function = ({ target: { value: v } }: any): void => {
+    const searchNumbers = /\D/g;
+
+    if (v.match(searchNumbers) || v.length > 2 || +v > 25 || v.startsWith('0')) {
+      return;
+    }
+
+    const replacedText = v.replace(searchNumbers, '');
+
+    setCustomTime(replacedText);
+    setInitialTime(replacedText);
   }
 
   return (
@@ -74,25 +82,42 @@ export const PomodoroTask: React.FC<ITask> = ({
 
       { taskWrited &&
         <>
-          <div className="task-content">
+          <div className="pomodoro-count">
             <StyledText>
-              Choose how many minutes you want to focus
+              Choose pomodoro count
             </StyledText>
 
-            <div className="choose-time">
-              {
-                chooseTime?.map((time: string, i: number) =>
-                  <StyledText key={i} large="true" onClick={chooseTimeHandler}>{ time ?? '' }</StyledText>)
-              }
-              <Input
-                placeholder="Custom"
-                value={customTime}
-                onChange={customTimeHandler}
+            <div className="choose-pomodoro-count">
+              <Rate
+                character={<FieldTimeOutlined />}
+                style={{ fontSize: 36 }}
+                value={pomodoroCount}
+                onChange={choosePomodoroCountHandler}
               />
             </div>
           </div>
 
-          { chooseInitialTime &&
+          { checkPomodoroCount &&
+            <div className="task-content">
+              <StyledText>
+                Choose how many minutes you want to focus
+              </StyledText>
+
+              <div className="choose-time">
+                {
+                  chooseTime?.map((time: string, i: number) =>
+                    <StyledText key={i} large="true" onClick={chooseTimeHandler}>{ time ?? '' }</StyledText>)
+                }
+                <Input
+                  placeholder="Custom"
+                  value={customTime}
+                  onChange={customTimeHandler}
+                />
+              </div>
+            </div>
+          }
+
+          { initialTime.length > 0 &&
             <div className="break-content">
               <StyledText>
                 Choose minutes of break

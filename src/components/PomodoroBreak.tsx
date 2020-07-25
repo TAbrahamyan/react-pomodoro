@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { IPomodoroBreak } from '../interfaces';
-import { StyledText } from '../styles';
+import { TimerText, StyledText } from '../styles';
 
 import { Modal } from 'antd';
 
@@ -9,18 +9,24 @@ let userBreakInterval: any;
 
 export const PomodoroBreak: React.FC<IPomodoroBreak> = ({
   setWriteableTask,
+  setDisabledStartButton,
+  initialTime,
+  setCountdownInitialTime,
   countdownUserBreak,
   setCountdownUserBreak,
   secondTimer,
   setSecondTimer,
   showBreakTime,
+  pomodoroCount,
+  setShowBreakTime,
 }) => {
   const [ visibleModal, setVisibleModal ] = React.useState<boolean>(false);
 
-  const hideModalHandler: any = (): void => {
-    setVisibleModal(false);
-    setWriteableTask(false);
-  };
+  React.useEffect(() => {
+    if (countdownUserBreak == '0' && pomodoroCount === 0) {
+      setVisibleModal(true);
+    }
+  }, [ countdownUserBreak ]);
 
   React.useEffect(() => {
     let newUserBreakTime: any = countdownUserBreak;
@@ -45,22 +51,39 @@ export const PomodoroBreak: React.FC<IPomodoroBreak> = ({
           setSecondTimer(newSecondBreakTime);
         } else {
           clearInterval(userBreakInterval);
-          setVisibleModal(true);
+
+          if (pomodoroCount !== 0) {
+            setCountdownInitialTime(initialTime);
+            setShowBreakTime(false);
+            setDisabledStartButton(false);
+          }
         }
-      }, 1);
+      }, 1000);
     }
-  }, [ showBreakTime ]);
+  }, []);
+
+  const hideModalHandler: any = (): void => {
+    setVisibleModal(false);
+    setWriteableTask(false);
+  };
 
   return (
-    <Modal
-      visible={visibleModal}
-      maskClosable={false}
-      onOk={hideModalHandler}
-      cancelButtonProps={{ style: { display: 'none' } }}
-      closable={false}
-    >
-      <StyledText bold="true" color="true" large="true">Break is over</StyledText>
-      <StyledText color="true">Set a new task</StyledText>
-    </Modal>
+    <>
+      <div>
+        <StyledText large="true" bold="true">Your break started!</StyledText>
+        <TimerText>{ countdownUserBreak }:{ secondTimer }</TimerText>
+      </div>
+
+      <Modal
+        visible={visibleModal}
+        maskClosable={false}
+        onOk={hideModalHandler}
+        cancelButtonProps={{ style: { display: 'none' } }}
+        closable={false}
+      >
+        <StyledText bold="true" color="true" large="true">Break is over</StyledText>
+        <StyledText color="true">Set a new task</StyledText>
+      </Modal>
+    </>
   );
 }
