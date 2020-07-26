@@ -16,7 +16,8 @@ export interface IPomodoroTask {
 
 // Pomodoro Task interface
 export interface IPomodoroTimer {
-  taskOutput: string[];
+  taskOutput: string;
+  setTaskOutput: Function,
   initialTime: string,
   userBreak: string,
   setWriteableTask: Function,

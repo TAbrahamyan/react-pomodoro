@@ -11,6 +11,7 @@ let initialTimeinterval: any;
 
 export const PomodoroTimer: React.FC<IPomodoroTimer> = ({
   taskOutput,
+  setTaskOutput,
   initialTime,
   userBreak,
   setWriteableTask,
@@ -22,6 +23,18 @@ export const PomodoroTimer: React.FC<IPomodoroTimer> = ({
   const [ countdownUserBreak, setCountdownUserBreak ] = React.useState<string>(userBreak);
   const [ disabledStartButton, setDisabledStartButton ] = React.useState<boolean>(false);
   const [ showBreakTime, setShowBreakTime ] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    const task: any = localStorage.getItem('task');
+    const pomodoroCount: any = localStorage.getItem('pomodoroCount');
+    const pomodoroTime: any = localStorage.getItem('time');
+
+    if (task && pomodoroCount && pomodoroTime) {
+      setTaskOutput(JSON.parse(task));
+      setPomodoroCount(JSON.parse(pomodoroCount))
+      setCountdownInitialTime(JSON.parse(pomodoroTime));
+    }
+  }, []);
 
   const startTimerHandler: Function = (): void => {
     let newInitialTime: any = countdownInitialTime;
@@ -100,11 +113,7 @@ export const PomodoroTimer: React.FC<IPomodoroTimer> = ({
 
             <div className="your-task">
               <StyledText large="true">Your task</StyledText>
-
-              {
-                taskOutput?.map((task: string, i: number) =>
-                  <StyledText key={i}>{ task ?? '' }</StyledText>)
-              }
+              <StyledText>{ taskOutput }</StyledText>
             </div>
           </>
         : <PomodoroBreak

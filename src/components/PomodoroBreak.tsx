@@ -25,11 +25,16 @@ export const PomodoroBreak: React.FC<IPomodoroBreak> = ({
   React.useEffect(() => {
     if (countdownUserBreak == '0' && pomodoroCount === 0) {
       setVisibleModal(true);
+      localStorage.removeItem('task');
+      localStorage.removeItem('pomodoroCount');
+      localStorage.removeItem('time');
+      localStorage.removeItem('break');
     }
   }, [ countdownUserBreak ]);
 
   React.useEffect(() => {
-    let newUserBreakTime: any = countdownUserBreak;
+    let newUserBreakTime: any = localStorage.getItem('break');
+    newUserBreakTime = JSON.parse(newUserBreakTime);
     let newSecondBreakTime: any = secondTimer;
 
     if (newUserBreakTime !== '0' && showBreakTime === true) {

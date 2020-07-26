@@ -33,6 +33,5 @@ export const TimerText: any = styled(Typography)`
 
 export const Input: any = styled(AntInput)`
   font-size: 1.5em;
-  font-weight: bold;
   border-radius: 25px;
 `;
