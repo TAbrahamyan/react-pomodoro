@@ -2,8 +2,7 @@
 export interface IPomodoroTask {
   pomodoroCount: number,
   setPomodoroCount: Function,
-  chooseTime: any[],
-  setChooseTime: Function,
+  chooseTime: string[],
   chooseBreak: string[],
   taskOutput: string[],
   setTaskOutput: Function,
@@ -16,13 +15,14 @@ export interface IPomodoroTask {
 
 // Pomodoro Task interface
 export interface IPomodoroTimer {
-  taskOutput: string;
+  taskOutput: string,
   setTaskOutput: Function,
   initialTime: string,
+  setInitialTime: Function,
   userBreak: string,
   setWriteableTask: Function,
-  setPomodoroCount: Function,
   pomodoroCount: number,
+  setPomodoroCount: Function,
 }
 // Pomodoro Task interface
 

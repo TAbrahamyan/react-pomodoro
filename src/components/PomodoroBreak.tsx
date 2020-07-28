@@ -1,40 +1,35 @@
 import React from 'react';
 
-import { IPomodoroBreak } from '../interfaces';
 import { TimerText, StyledText } from '../styles';
+import { PomodoroContext, defaultContext } from '../context/PomodoroContext';
 
 import { Modal } from 'antd';
 
 let userBreakInterval: any;
 
-export const PomodoroBreak: React.FC<IPomodoroBreak> = ({
+export const PomodoroBreak: React.FC<any> = ({
   setWriteableTask,
-  setDisabledStartButton,
-  initialTime,
   setCountdownInitialTime,
   countdownUserBreak,
   setCountdownUserBreak,
-  secondTimer,
   setSecondTimer,
+  secondTimer,
   showBreakTime,
-  pomodoroCount,
   setShowBreakTime,
+  setDisabledStartButton,
 }) => {
+  const { pomodoro, setPomodoro } = React.useContext<any>(PomodoroContext);
   const [ visibleModal, setVisibleModal ] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    if (countdownUserBreak == '0' && pomodoroCount === 0) {
+    if (countdownUserBreak == '0' && pomodoro.pomodoroCount === 0) {
       setVisibleModal(true);
-      localStorage.removeItem('task');
-      localStorage.removeItem('pomodoroCount');
-      localStorage.removeItem('time');
-      localStorage.removeItem('break');
+      localStorage.removeItem('pomodoro');
     }
-  }, [ countdownUserBreak ]);
+  }, [ countdownUserBreak, pomodoro.pomodoroCount ]);
 
   React.useEffect(() => {
-    let newUserBreakTime: any = localStorage.getItem('break');
-    newUserBreakTime = JSON.parse(newUserBreakTime);
+    let newUserBreakTime: any = pomodoro.userBreak;
     let newSecondBreakTime: any = secondTimer;
 
     if (newUserBreakTime !== '0' && showBreakTime === true) {
@@ -57,8 +52,8 @@ export const PomodoroBreak: React.FC<IPomodoroBreak> = ({
         } else {
           clearInterval(userBreakInterval);
 
-          if (pomodoroCount !== 0) {
-            setCountdownInitialTime(initialTime);
+          if (pomodoro.pomodoroCount !== 0) {
+            setCountdownInitialTime(pomodoro.initialTime);
             setShowBreakTime(false);
             setDisabledStartButton(false);
           }
@@ -70,6 +65,7 @@ export const PomodoroBreak: React.FC<IPomodoroBreak> = ({
   const hideModalHandler: any = (): void => {
     setVisibleModal(false);
     setWriteableTask(false);
+    setPomodoro(defaultContext);
   };
 
   return (

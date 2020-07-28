@@ -32,6 +32,10 @@
 
     .choose-time {
       @include flex-content;
+
+      input {
+        width: 20%;
+      }
     }
   }
 

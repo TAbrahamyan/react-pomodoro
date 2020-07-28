@@ -1,68 +1,52 @@
 import React from 'react';
 
-import { IPomodoroTask } from '../interfaces';
 import { Button, Input, StyledText } from '../styles';
+import { PomodoroContext } from '../context/PomodoroContext';
 
 import { Rate, Modal } from 'antd';
 import { FieldTimeOutlined } from '@ant-design/icons';
 import '../scss/components/_pomodoro_task.scss';
 
-export const PomodoroTask: React.FC<IPomodoroTask> = ({
-  pomodoroCount,
-  setPomodoroCount,
-  chooseTime,
-  chooseBreak,
-  taskOutput,
-  setTaskOutput,
-  setWriteableTask,
-  setInitialTime,
-  setUserBreak,
-  initialTime,
-}) => {
+const chooseTime: string[] = [ '5', '10', '15', '20', '25' ];
+const chooseBreak: string[] = [ '5', '10', '30' ];
+
+export const PomodoroTask: React.FC<any> = ({ setWriteableTask }) => {
+  const { pomodoro, setPomodoro } = React.useContext<any>(PomodoroContext);
   const [ taskInput, setTaskInput ] = React.useState<string>('');
   const [ customTime, setCustomTime ] = React.useState<string>('');
-  const [ taskWrited, setTaskWrited ] = React.useState<boolean>(false);
   const [ inputDisabled, setInputDisabled ] = React.useState<boolean>(false);
-  const [ checkPomodoroCount, setCheckPomodoroCount ] = React.useState<boolean>(false);
   const [ visibleModal, setVisibleModal ] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    const task: any = localStorage.getItem('task');
-    const pomodoroCount: any = localStorage.getItem('pomodoroCount');
-    const pomodoroTime: any = localStorage.getItem('time');
-    const pomodoroBreak: any = localStorage.getItem('break');
+    const savedPomodoro: any = localStorage.getItem('pomodoro');
 
-    if (task && pomodoroCount && pomodoroTime && pomodoroBreak) {
+    if (JSON.parse(savedPomodoro)) {
       setVisibleModal(true);
     }
   }, []);
 
   const addTaskHandler: Function = (): void => {
-    if (!taskInput.trim()) {
-      return;
-    }
+    const input: string = taskInput.trim();
 
-    setTaskOutput([ ...taskOutput, taskInput ]);
-    localStorage.setItem('task', JSON.stringify(taskInput));
-    setTaskInput('');
-    setTaskWrited(true);
+    if (!input) return;
+
+    setPomodoro({ ...pomodoro, taskOutput: input });
     setInputDisabled(true);
   }
 
   const choosePomodoroCountHandler: any = (value: any): void => {
-    setPomodoroCount(value);
-    localStorage.setItem('pomodoroCount', JSON.stringify(value));
-    setCheckPomodoroCount(true);
+    setPomodoro({ ...pomodoro, pomodoroCount: value });
   }
 
   const chooseTimeHandler: Function = ({ target: { textContent: t } }: any): void => {
-    setInitialTime(t);
-    localStorage.setItem('time', JSON.stringify(t));
+    setPomodoro({ ...pomodoro, initialTime: t });
+    setCustomTime('');
   }
 
   const chooseBreakHandlder: Function = ({ target: { textContent: t } }: any): void => {
-    setUserBreak(t);
-    localStorage.setItem('break', JSON.stringify(t));
+    const newPomodoro = { ...pomodoro, userBreak: t };
+    setPomodoro(newPomodoro);
+    localStorage.setItem('pomodoro', JSON.stringify(newPomodoro));
     setWriteableTask(true);
   }
 
@@ -74,20 +58,19 @@ export const PomodoroTask: React.FC<IPomodoroTask> = ({
     }
 
     const replacedText = v.replace(searchNumbers, '');
-
     setCustomTime(replacedText);
-    setInitialTime(replacedText);
-    localStorage.setItem('time', JSON.stringify(replacedText));
+    setPomodoro({ ...pomodoro, initialTime: replacedText });
   }
 
-  const continueTaskHandler: any = (): void => setWriteableTask(true);
+  const continueTaskHandler: any = (): void => {
+    const savedPomodoro: any = localStorage.getItem('pomodoro');
+    setPomodoro(JSON.parse(savedPomodoro));
+    setWriteableTask(true);
+  };
 
   const cancelTaskHandler: any = (): void => {
     setVisibleModal(false);
-    localStorage.removeItem('task');
-    localStorage.removeItem('pomodoroCount');
-    localStorage.removeItem('time');
-    localStorage.removeItem('break');
+    localStorage.removeItem('pomodoro');
   }
 
   const modalTextColor = { color: 'black' };
@@ -122,7 +105,7 @@ export const PomodoroTask: React.FC<IPomodoroTask> = ({
         </Button>
       </div>
 
-      { taskWrited &&
+      { pomodoro.taskOutput.length > 0 &&
         <>
           <div className="pomodoro-count">
             <StyledText>
@@ -133,13 +116,13 @@ export const PomodoroTask: React.FC<IPomodoroTask> = ({
               <Rate
                 character={<FieldTimeOutlined />}
                 style={{ fontSize: 36 }}
-                value={pomodoroCount}
+                value={pomodoro.pomodoroCount}
                 onChange={choosePomodoroCountHandler}
               />
             </div>
           </div>
 
-          { checkPomodoroCount &&
+          { pomodoro.pomodoroCount !== 0 &&
             <div className="task-content">
               <StyledText>
                 Choose how many minutes you want to focus
@@ -159,7 +142,7 @@ export const PomodoroTask: React.FC<IPomodoroTask> = ({
             </div>
           }
 
-          { initialTime.length > 0 &&
+          { pomodoro.initialTime.length > 0 &&
             <div className="break-content">
               <StyledText>
                 Choose minutes of break

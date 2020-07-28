@@ -1,44 +1,26 @@
 import React from 'react';
 
-import { PomodoroBreak } from './PomodoroBreak';
-import { IPomodoroTimer } from '../interfaces';
 import { Button, TimerText, StyledText } from '../styles';
+import { PomodoroBreak } from './PomodoroBreak';
+import { PomodoroContext } from '../context/PomodoroContext';
 
 import { FieldTimeOutlined } from '@ant-design/icons';
 import '../scss/components/_pomodoro_timer.scss';
 
 let initialTimeinterval: any;
 
-export const PomodoroTimer: React.FC<IPomodoroTimer> = ({
-  taskOutput,
-  setTaskOutput,
-  initialTime,
-  userBreak,
-  setWriteableTask,
-  setPomodoroCount,
-  pomodoroCount,
-}) => {
+export const PomodoroTimer: React.FC<any> = ({ setWriteableTask }) => {
+  const { pomodoro, setPomodoro } = React.useContext<any>(PomodoroContext);
   const [ secondTimer, setSecondTimer ] = React.useState<string>('00');
-  const [ countdownInitialTime, setCountdownInitialTime ] = React.useState<string>(initialTime);
-  const [ countdownUserBreak, setCountdownUserBreak ] = React.useState<string>(userBreak);
+  const [ countdownInitialTime, setCountdownInitialTime ] = React.useState<string>(pomodoro.initialTime);
+  const [ countdownUserBreak, setCountdownUserBreak ] = React.useState<string>(pomodoro.userBreak);
   const [ disabledStartButton, setDisabledStartButton ] = React.useState<boolean>(false);
   const [ showBreakTime, setShowBreakTime ] = React.useState<boolean>(false);
-
-  React.useEffect(() => {
-    const task: any = localStorage.getItem('task');
-    const pomodoroCount: any = localStorage.getItem('pomodoroCount');
-    const pomodoroTime: any = localStorage.getItem('time');
-
-    if (task && pomodoroCount && pomodoroTime) {
-      setTaskOutput(JSON.parse(task));
-      setPomodoroCount(JSON.parse(pomodoroCount))
-      setCountdownInitialTime(JSON.parse(pomodoroTime));
-    }
-  }, []);
 
   const startTimerHandler: Function = (): void => {
     let newInitialTime: any = countdownInitialTime;
     let newSecondTime: any = secondTimer;
+    let newPomodoroCount: number = pomodoro.pomodoroCount;
 
     setDisabledStartButton(true);
 
@@ -60,13 +42,13 @@ export const PomodoroTimer: React.FC<IPomodoroTimer> = ({
           setCountdownInitialTime(newInitialTime);
           setSecondTimer(newSecondTime);
         } else {
-          if (pomodoroCount !== 0) {
-            pomodoroCount -= 1;
-            setPomodoroCount(pomodoroCount);
+          if (newPomodoroCount !== 0) {
+            newPomodoroCount -= 1;
+            setPomodoro({ ...pomodoro, pomodoroCount: newPomodoroCount });
             clearInterval(initialTimeinterval);
           }
 
-          setCountdownUserBreak(userBreak);
+          setCountdownUserBreak(pomodoro.userBreak);
           setShowBreakTime(true);
         }
       }, 1000);
@@ -74,7 +56,7 @@ export const PomodoroTimer: React.FC<IPomodoroTimer> = ({
   }
 
   const resetTimerHandler: Function = (): void => {
-    setCountdownInitialTime(initialTime);
+    setCountdownInitialTime(pomodoro.initialTime);
     setSecondTimer('00');
     setDisabledStartButton(false);
     clearInterval(initialTimeinterval);
@@ -92,7 +74,7 @@ export const PomodoroTimer: React.FC<IPomodoroTimer> = ({
             <div>
               <TimerText>{ countdownInitialTime }:{ secondTimer }</TimerText>
               <StyledText style={{ margin: '1rem' }} large="true">
-                { pomodoroCount }
+                { pomodoro.pomodoroCount }
                 <FieldTimeOutlined style={{ color: '#FADB14' }} />
               </StyledText>
             </div>
@@ -113,21 +95,19 @@ export const PomodoroTimer: React.FC<IPomodoroTimer> = ({
 
             <div className="your-task">
               <StyledText large="true">Your task</StyledText>
-              <StyledText>{ taskOutput }</StyledText>
+              <StyledText>{ pomodoro.taskOutput }</StyledText>
             </div>
           </>
         : <PomodoroBreak
-            setWriteableTask={setWriteableTask}
-            setDisabledStartButton={setDisabledStartButton}
-            initialTime={initialTime}
-            setCountdownInitialTime={setCountdownInitialTime}
             countdownUserBreak={countdownUserBreak}
-            setCountdownUserBreak={setCountdownUserBreak}
+            setCountdownInitialTime={setCountdownInitialTime}
             secondTimer={secondTimer}
             setSecondTimer={setSecondTimer}
             showBreakTime={showBreakTime}
-            pomodoroCount={pomodoroCount}
             setShowBreakTime={setShowBreakTime}
+            setCountdownUserBreak={setCountdownUserBreak}
+            setDisabledStartButton={setDisabledStartButton}
+            setWriteableTask={setWriteableTask}
           />
       }
     </div>
