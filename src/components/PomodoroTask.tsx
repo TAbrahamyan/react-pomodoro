@@ -7,18 +7,20 @@ import { Rate, Modal } from 'antd';
 import { FieldTimeOutlined } from '@ant-design/icons';
 import '../scss/components/_pomodoro_task.scss';
 
+type Props = { setWriteableTask: Function };
+
 const chooseTime: string[] = [ '5', '10', '15', '20', '25' ];
 const chooseBreak: string[] = [ '5', '10', '30' ];
 
-export const PomodoroTask: React.FC<any> = ({ setWriteableTask }) => {
-  const { pomodoro, setPomodoro } = React.useContext<any>(PomodoroContext);
+export const PomodoroTask: React.FC<Props> = ({ setWriteableTask }) => {
+  const { pomodoro, setPomodoro } = React.useContext(PomodoroContext);
   const [ taskInput, setTaskInput ] = React.useState<string>('');
   const [ customTime, setCustomTime ] = React.useState<string>('');
   const [ inputDisabled, setInputDisabled ] = React.useState<boolean>(false);
   const [ visibleModal, setVisibleModal ] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    const savedPomodoro: any = localStorage.getItem('pomodoro');
+    const savedPomodoro = localStorage.getItem('pomodoro') as string;
 
     if (JSON.parse(savedPomodoro)) {
       setVisibleModal(true);
@@ -34,7 +36,7 @@ export const PomodoroTask: React.FC<any> = ({ setWriteableTask }) => {
     setInputDisabled(true);
   }
 
-  const choosePomodoroCountHandler: any = (value: any): void => {
+  const choosePomodoroCountHandler: any = (value: number): void => {
     setPomodoro({ ...pomodoro, pomodoroCount: value });
   }
 
@@ -63,7 +65,7 @@ export const PomodoroTask: React.FC<any> = ({ setWriteableTask }) => {
   }
 
   const continueTaskHandler: any = (): void => {
-    const savedPomodoro: any = localStorage.getItem('pomodoro');
+    const savedPomodoro = localStorage.getItem('pomodoro') as string;
     setPomodoro(JSON.parse(savedPomodoro));
     setWriteableTask(true);
   };

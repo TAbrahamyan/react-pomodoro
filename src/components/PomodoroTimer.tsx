@@ -7,10 +7,12 @@ import { PomodoroContext } from '../context/PomodoroContext';
 import { FieldTimeOutlined } from '@ant-design/icons';
 import '../scss/components/_pomodoro_timer.scss';
 
-let initialTimeinterval: any;
+type Props = { setWriteableTask: Function };
 
-export const PomodoroTimer: React.FC<any> = ({ setWriteableTask }) => {
-  const { pomodoro, setPomodoro } = React.useContext<any>(PomodoroContext);
+let initialTimeinterval: ReturnType<typeof setInterval>;
+
+export const PomodoroTimer: React.FC<Props> = ({ setWriteableTask }) => {
+  const { pomodoro, setPomodoro } = React.useContext(PomodoroContext);
   const [ secondTimer, setSecondTimer ] = React.useState<string>('00');
   const [ countdownInitialTime, setCountdownInitialTime ] = React.useState<string>(pomodoro.initialTime);
   const [ countdownUserBreak, setCountdownUserBreak ] = React.useState<string>(pomodoro.userBreak);
@@ -50,8 +52,9 @@ export const PomodoroTimer: React.FC<any> = ({ setWriteableTask }) => {
 
           setCountdownUserBreak(pomodoro.userBreak);
           setShowBreakTime(true);
+          setDisabledStartButton(false);
         }
-      }, 1000);
+      }, 10);
     }
   }
 
@@ -100,13 +103,12 @@ export const PomodoroTimer: React.FC<any> = ({ setWriteableTask }) => {
           </>
         : <PomodoroBreak
             countdownUserBreak={countdownUserBreak}
-            setCountdownInitialTime={setCountdownInitialTime}
+            setCountdownUserBreak={setCountdownUserBreak}
             secondTimer={secondTimer}
             setSecondTimer={setSecondTimer}
             showBreakTime={showBreakTime}
             setShowBreakTime={setShowBreakTime}
-            setCountdownUserBreak={setCountdownUserBreak}
-            setDisabledStartButton={setDisabledStartButton}
+            setCountdownInitialTime={setCountdownInitialTime}
             setWriteableTask={setWriteableTask}
           />
       }

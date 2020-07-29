@@ -1,24 +1,24 @@
 import React from 'react';
 
+import { IPomodoroBreak } from '../interfaces';
 import { TimerText, StyledText } from '../styles';
 import { PomodoroContext, defaultContext } from '../context/PomodoroContext';
 
 import { Modal } from 'antd';
 
-let userBreakInterval: any;
+let userBreakInterval: ReturnType<typeof setInterval>;
 
-export const PomodoroBreak: React.FC<any> = ({
-  setWriteableTask,
-  setCountdownInitialTime,
+export const PomodoroBreak: React.FC<IPomodoroBreak> = ({
   countdownUserBreak,
   setCountdownUserBreak,
-  setSecondTimer,
   secondTimer,
+  setSecondTimer,
   showBreakTime,
   setShowBreakTime,
-  setDisabledStartButton,
+  setCountdownInitialTime,
+  setWriteableTask,
 }) => {
-  const { pomodoro, setPomodoro } = React.useContext<any>(PomodoroContext);
+  const { pomodoro, setPomodoro } = React.useContext(PomodoroContext);
   const [ visibleModal, setVisibleModal ] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -55,10 +55,9 @@ export const PomodoroBreak: React.FC<any> = ({
           if (pomodoro.pomodoroCount !== 0) {
             setCountdownInitialTime(pomodoro.initialTime);
             setShowBreakTime(false);
-            setDisabledStartButton(false);
           }
         }
-      }, 1000);
+      }, 10);
     }
   }, []);
 
