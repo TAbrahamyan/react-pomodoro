@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink, useHistory } from 'react-router-dom';
 
 import { Button, Input, StyledText } from '../styles';
 import { Context } from '../Context';
@@ -7,20 +8,19 @@ import { Rate, Modal } from 'antd';
 import { FieldTimeOutlined } from '@ant-design/icons';
 import '../scss/components/_pomodoro_task.scss';
 
-type Props = { setWriteableTask: Function };
-
 const chooseTime: string[] = [ '5', '10', '15', '20', '25' ];
 const chooseBreak: string[] = [ '5', '10', '30' ];
 
-export const PomodoroTask: React.FC<Props> = ({ setWriteableTask }) => {
+export const PomodoroTask: React.FC = () => {
   const { pomodoro, setPomodoro } = React.useContext(Context);
+  const history = useHistory();
   const [ taskInput, setTaskInput ] = React.useState<string>('');
   const [ customTime, setCustomTime ] = React.useState<string>('');
   const [ inputDisabled, setInputDisabled ] = React.useState<boolean>(false);
   const [ visibleModal, setVisibleModal ] = React.useState<boolean>(false);
   const [ showChoosing, setShowChoosing ] = React.useState<boolean>(false);
 
-  React.useEffect(() => {
+  React.useEffect((): void => {
     const savedPomodoro = localStorage.getItem('pomodoro') as string;
 
     if (JSON.parse(savedPomodoro)) {
@@ -66,7 +66,7 @@ export const PomodoroTask: React.FC<Props> = ({ setWriteableTask }) => {
   const continueTaskHandler: any = (): void => {
     const savedPomodoro = localStorage.getItem('pomodoro') as string;
     setPomodoro(JSON.parse(savedPomodoro));
-    setWriteableTask(true);
+    history.push('/timer');
   };
 
   const cancelTaskHandler: any = (): void => {
@@ -76,7 +76,6 @@ export const PomodoroTask: React.FC<Props> = ({ setWriteableTask }) => {
 
   const goHandler: Function = (): void => {
     localStorage.setItem('pomodoro', JSON.stringify(pomodoro));
-    setWriteableTask(true);
   }
 
   const modalTextColor = { color: 'black' };
@@ -94,25 +93,24 @@ export const PomodoroTask: React.FC<Props> = ({ setWriteableTask }) => {
         <StyledText style={modalTextColor}>Do you want to continue?</StyledText>
       </Modal>
 
-      <StyledText large="true" bold="true">
-        Write a task you want to focus on
-      </StyledText>
-
-      <div>
-        <Input
-          value={taskInput}
-          onChange={({ target: { value: v } }: any) => setTaskInput(v)}
-          onPressEnter={addTaskHandler}
-          disabled={inputDisabled}
-        />
-
-        <Button onClick={addTaskHandler}>
-          Add
-        </Button>
-      </div>
-
       { !showChoosing
         ? (<>
+            <StyledText large="true" bold="true">
+              Write a task you want to focus on
+            </StyledText>
+
+            <div>
+              <Input
+                value={taskInput}
+                onChange={({ target: { value: v } }: any) => setTaskInput(v)}
+                onPressEnter={addTaskHandler}
+                disabled={inputDisabled}
+              />
+
+              <Button onClick={addTaskHandler}>
+                Add
+              </Button>
+            </div>
           { pomodoro.taskOutput.length > 0 &&
             <>
               <div className="pomodoro-count">
@@ -180,9 +178,11 @@ export const PomodoroTask: React.FC<Props> = ({ setWriteableTask }) => {
               Your time: { pomodoro.userBreak }
             </StyledText>
 
-            <Button onClick={goHandler}>
-              Go!
-            </Button>
+            <NavLink to={'/timer'}>
+              <Button onClick={goHandler}>
+                Go!
+              </Button>
+            </NavLink>
           </div>)
       }
     </div>

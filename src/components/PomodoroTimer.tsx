@@ -7,11 +7,9 @@ import { Context } from '../Context';
 import { FieldTimeOutlined } from '@ant-design/icons';
 import '../scss/components/_pomodoro_timer.scss';
 
-type Props = { setWriteableTask: Function };
-
 let initialTimeinterval: ReturnType<typeof setInterval>;
 
-export const PomodoroTimer: React.FC<Props> = ({ setWriteableTask }) => {
+export const PomodoroTimer: React.FC = () => {
   const { pomodoro, setPomodoro } = React.useContext(Context);
   const [ secondTimer, setSecondTimer ] = React.useState<string>('00');
   const [ countdownInitialTime, setCountdownInitialTime ] = React.useState<string>(pomodoro.initialTime);
@@ -109,7 +107,6 @@ export const PomodoroTimer: React.FC<Props> = ({ setWriteableTask }) => {
             showBreakTime={showBreakTime}
             setShowBreakTime={setShowBreakTime}
             setCountdownInitialTime={setCountdownInitialTime}
-            setWriteableTask={setWriteableTask}
           />
       }
     </div>

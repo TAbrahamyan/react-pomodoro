@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { IPomodoroBreak } from '../interfaces';
 import { TimerText, StyledText } from '../styles';
@@ -16,19 +17,19 @@ export const PomodoroBreak: React.FC<IPomodoroBreak> = ({
   showBreakTime,
   setShowBreakTime,
   setCountdownInitialTime,
-  setWriteableTask,
 }) => {
   const { pomodoro, setPomodoro } = React.useContext(Context);
+  const history = useHistory();
   const [ visibleModal, setVisibleModal ] = React.useState<boolean>(false);
 
-  React.useEffect(() => {
+  React.useEffect((): void => {
     if (countdownUserBreak == '0' && pomodoro.pomodoroCount === 0) {
       setVisibleModal(true);
       localStorage.removeItem('pomodoro');
     }
   }, [ countdownUserBreak, pomodoro.pomodoroCount ]);
 
-  React.useEffect(() => {
+  React.useEffect((): void => {
     let newUserBreakTime: any = pomodoro.userBreak;
     let newSecondBreakTime: any = secondTimer;
 
@@ -63,8 +64,8 @@ export const PomodoroBreak: React.FC<IPomodoroBreak> = ({
 
   const hideModalHandler: any = (): void => {
     setVisibleModal(false);
-    setWriteableTask(false);
     setPomodoro(defaultContext);
+    history.push('/');
   };
 
   return (

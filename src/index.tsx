@@ -1,20 +1,26 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
 
-import { Timer } from './pages/Timer';
+import { IContext } from './interfaces';
+import { Context, defaultContext } from './Context';
+import { Routes } from './Routes';
 
 import 'antd/dist/antd.css';
 import './scss/_index.scss';
 
 const App: React.FC = () => {
+  const [ pomodoro, setPomodoro ] = React.useState<IContext>(defaultContext);
+
   return (
-    <div className="pomodoro">
-      <Timer />
-    </div>
+    <Context.Provider value={{ pomodoro, setPomodoro }}>
+      <div className="pomodoro">
+        <Routes pomodoro={pomodoro} />
+      </div>
+    </Context.Provider>
   );
 }
 
-ReactDOM.render(
+render(
   <App />,
   document.getElementById('root')
 );

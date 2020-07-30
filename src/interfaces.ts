@@ -16,6 +16,5 @@ export interface IPomodoroBreak {
   showBreakTime: boolean,
   setShowBreakTime: Function,
   setCountdownInitialTime: Function,
-  setWriteableTask: Function,
 }
 // Pomodoro break interface
