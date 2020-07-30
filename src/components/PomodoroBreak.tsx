@@ -2,7 +2,7 @@ import React from 'react';
 
 import { IPomodoroBreak } from '../interfaces';
 import { TimerText, StyledText } from '../styles';
-import { PomodoroContext, defaultContext } from '../context/PomodoroContext';
+import { Context, defaultContext } from '../Context';
 
 import { Modal } from 'antd';
 
@@ -18,7 +18,7 @@ export const PomodoroBreak: React.FC<IPomodoroBreak> = ({
   setCountdownInitialTime,
   setWriteableTask,
 }) => {
-  const { pomodoro, setPomodoro } = React.useContext(PomodoroContext);
+  const { pomodoro, setPomodoro } = React.useContext(Context);
   const [ visibleModal, setVisibleModal ] = React.useState<boolean>(false);
 
   React.useEffect(() => {

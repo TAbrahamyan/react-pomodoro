@@ -1,20 +1,20 @@
 import React from 'react';
 
-import { IPomodroContext } from '../interfaces';
+import { IContext } from '../interfaces';
 import { PomodoroTimer } from '../components/PomodoroTimer';
 import { PomodoroTask } from '../components/PomodoroTask';
-import { PomodoroContext, defaultContext } from '../context/PomodoroContext';
+import { Context, defaultContext } from '../Context';
 
 export const Timer: React.FC = () => {
   const [ writeableTask, setWriteableTask ] = React.useState<boolean>(false);
-  const [ pomodoro, setPomodoro ] = React.useState<IPomodroContext>(defaultContext);
+  const [ pomodoro, setPomodoro ] = React.useState<IContext>(defaultContext);
 
   return (
-    <PomodoroContext.Provider value={{ pomodoro, setPomodoro }}>
+    <Context.Provider value={{ pomodoro, setPomodoro }}>
       { writeableTask
         ? <PomodoroTimer setWriteableTask={setWriteableTask} />
         : <PomodoroTask setWriteableTask={setWriteableTask} />
       }
-    </PomodoroContext.Provider>
+    </Context.Provider>
   );
 }

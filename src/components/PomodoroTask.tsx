@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Button, Input, StyledText } from '../styles';
-import { PomodoroContext } from '../context/PomodoroContext';
+import { Context } from '../Context';
 
 import { Rate, Modal } from 'antd';
 import { FieldTimeOutlined } from '@ant-design/icons';
@@ -13,11 +13,12 @@ const chooseTime: string[] = [ '5', '10', '15', '20', '25' ];
 const chooseBreak: string[] = [ '5', '10', '30' ];
 
 export const PomodoroTask: React.FC<Props> = ({ setWriteableTask }) => {
-  const { pomodoro, setPomodoro } = React.useContext(PomodoroContext);
+  const { pomodoro, setPomodoro } = React.useContext(Context);
   const [ taskInput, setTaskInput ] = React.useState<string>('');
   const [ customTime, setCustomTime ] = React.useState<string>('');
   const [ inputDisabled, setInputDisabled ] = React.useState<boolean>(false);
   const [ visibleModal, setVisibleModal ] = React.useState<boolean>(false);
+  const [ showChoosing, setShowChoosing ] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     const savedPomodoro = localStorage.getItem('pomodoro') as string;
@@ -46,10 +47,8 @@ export const PomodoroTask: React.FC<Props> = ({ setWriteableTask }) => {
   }
 
   const chooseBreakHandlder: Function = ({ target: { textContent: t } }: any): void => {
-    const newPomodoro = { ...pomodoro, userBreak: t };
-    setPomodoro(newPomodoro);
-    localStorage.setItem('pomodoro', JSON.stringify(newPomodoro));
-    setWriteableTask(true);
+    setPomodoro({ ...pomodoro, userBreak: t });
+    setShowChoosing(true);
   }
 
   const customTimeHandler: Function = ({ target: { value: v } }: any): void => {
@@ -73,6 +72,11 @@ export const PomodoroTask: React.FC<Props> = ({ setWriteableTask }) => {
   const cancelTaskHandler: any = (): void => {
     setVisibleModal(false);
     localStorage.removeItem('pomodoro');
+  }
+
+  const goHandler: Function = (): void => {
+    localStorage.setItem('pomodoro', JSON.stringify(pomodoro));
+    setWriteableTask(true);
   }
 
   const modalTextColor = { color: 'black' };
@@ -107,58 +111,79 @@ export const PomodoroTask: React.FC<Props> = ({ setWriteableTask }) => {
         </Button>
       </div>
 
-      { pomodoro.taskOutput.length > 0 &&
-        <>
-          <div className="pomodoro-count">
+      { !showChoosing
+        ? (<>
+          { pomodoro.taskOutput.length > 0 &&
+            <>
+              <div className="pomodoro-count">
+                <StyledText>
+                  Choose pomodoro count
+                </StyledText>
+
+                <div className="choose-pomodoro-count">
+                  <Rate
+                    character={<FieldTimeOutlined />}
+                    style={{ fontSize: 36 }}
+                    value={pomodoro.pomodoroCount}
+                    onChange={choosePomodoroCountHandler}
+                  />
+                </div>
+              </div>
+
+              { pomodoro.pomodoroCount !== 0 &&
+                <div className="task-content">
+                  <StyledText>
+                    Choose how many minutes you want to focus
+                  </StyledText>
+
+                  <div className="choose-time">
+                    {
+                      chooseTime?.map((time: string, i: number) =>
+                        <StyledText key={i} large="true" onClick={chooseTimeHandler}>{ time ?? '' }</StyledText>)
+                    }
+                    <Input
+                      placeholder="Custom"
+                      value={customTime}
+                      onChange={customTimeHandler}
+                    />
+                  </div>
+                </div>
+              }
+
+              { pomodoro.initialTime.length > 0 &&
+                <div className="break-content">
+                  <StyledText>
+                    Choose minutes of break
+                  </StyledText>
+
+                  <div className="choose-break">
+                    {
+                      chooseBreak?.map((userBreak: string, i: number) =>
+                        <StyledText key={i} onClick={chooseBreakHandlder}>{ userBreak ?? '' }</StyledText>)
+                    }
+                  </div>
+                </div>
+              }
+            </>
+          }
+        </>)
+        : (<div>
             <StyledText>
-              Choose pomodoro count
+              Pomodoro count: { pomodoro.pomodoroCount }
             </StyledText>
 
-            <div className="choose-pomodoro-count">
-              <Rate
-                character={<FieldTimeOutlined />}
-                style={{ fontSize: 36 }}
-                value={pomodoro.pomodoroCount}
-                onChange={choosePomodoroCountHandler}
-              />
-            </div>
-          </div>
+            <StyledText>
+              Your time: { pomodoro.initialTime }
+            </StyledText>
 
-          { pomodoro.pomodoroCount !== 0 &&
-            <div className="task-content">
-              <StyledText>
-                Choose how many minutes you want to focus
-              </StyledText>
+            <StyledText>
+              Your time: { pomodoro.userBreak }
+            </StyledText>
 
-              <div className="choose-time">
-                {
-                  chooseTime?.map((time: string, i: number) =>
-                    <StyledText key={i} large="true" onClick={chooseTimeHandler}>{ time ?? '' }</StyledText>)
-                }
-                <Input
-                  placeholder="Custom"
-                  value={customTime}
-                  onChange={customTimeHandler}
-                />
-              </div>
-            </div>
-          }
-
-          { pomodoro.initialTime.length > 0 &&
-            <div className="break-content">
-              <StyledText>
-                Choose minutes of break
-              </StyledText>
-
-              <div className="choose-break">
-                {
-                  chooseBreak?.map((userBreak: string, i: number) =>
-                    <StyledText key={i} onClick={chooseBreakHandlder}>{ userBreak ?? '' }</StyledText>)
-                }
-              </div>
-            </div>
-          }
-        </>
+            <Button onClick={goHandler}>
+              Go!
+            </Button>
+          </div>)
       }
     </div>
   );

@@ -1,5 +1,5 @@
 // Pomodoro context interface
-export interface IPomodroContext {
+export interface IContext {
   pomodoroCount: number,
   initialTime: string,
   taskOutput: string,
