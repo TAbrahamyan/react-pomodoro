@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Button, TimerText, StyledText } from '../styles';
 import { PomodoroBreak } from './PomodoroBreak';
-import { Context } from '../Context';
+import { Context, defaultContext } from '../Context';
 
 import { FieldTimeOutlined } from '@ant-design/icons';
 import '../scss/components/_pomodoro_timer.scss';
@@ -16,6 +16,15 @@ export const PomodoroTimer: React.FC = () => {
   const [ countdownUserBreak, setCountdownUserBreak ] = React.useState<string>(pomodoro.userBreak);
   const [ disabledStartButton, setDisabledStartButton ] = React.useState<boolean>(false);
   const [ showBreakTime, setShowBreakTime ] = React.useState<boolean>(false);
+
+  React.useEffect((): any => {
+    return () => {
+      if (window.location.pathname === '/') {
+        clearInterval(initialTimeinterval);
+        setPomodoro(defaultContext);
+      }
+    }
+  }, [ setPomodoro ]);
 
   const startTimerHandler: Function = (): void => {
     let newInitialTime: any = countdownInitialTime;

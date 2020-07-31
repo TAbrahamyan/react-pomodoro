@@ -22,12 +22,19 @@ export const PomodoroBreak: React.FC<IPomodoroBreak> = ({
   const history = useHistory();
   const [ visibleModal, setVisibleModal ] = React.useState<boolean>(false);
 
-  React.useEffect((): void => {
+  React.useEffect((): any => {
     if (countdownUserBreak == '0' && pomodoro.pomodoroCount === 0) {
       setVisibleModal(true);
       localStorage.removeItem('pomodoro');
     }
-  }, [ countdownUserBreak, pomodoro.pomodoroCount ]);
+
+    return () => {
+      if (window.location.pathname === '/') {
+        clearInterval(userBreakInterval);
+        setPomodoro(defaultContext);
+      }
+    }
+  }, [ countdownUserBreak, pomodoro.pomodoroCount, setPomodoro ]);
 
   React.useEffect((): void => {
     let newUserBreakTime: any = pomodoro.userBreak;

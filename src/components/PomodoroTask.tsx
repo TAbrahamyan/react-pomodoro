@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink, useHistory } from 'react-router-dom';
 
 import { Button, Input, StyledText } from '../styles';
-import { Context } from '../Context';
+import { Context, defaultContext } from '../Context';
 
 import { Rate, Modal } from 'antd';
 import { FieldTimeOutlined } from '@ant-design/icons';
@@ -71,6 +71,7 @@ export const PomodoroTask: React.FC = () => {
 
   const cancelTaskHandler: any = (): void => {
     setVisibleModal(false);
+    setPomodoro(defaultContext);
     localStorage.removeItem('pomodoro');
   }
 
@@ -167,15 +168,19 @@ export const PomodoroTask: React.FC = () => {
         </>)
         : (<div>
             <StyledText>
-              Pomodoro count: { pomodoro.pomodoroCount }
+              Your task: <strong>{ pomodoro.taskOutput }</strong>
             </StyledText>
 
             <StyledText>
-              Your time: { pomodoro.initialTime }
+              Pomodoro count: <strong>{ pomodoro.pomodoroCount }</strong>
             </StyledText>
 
             <StyledText>
-              Your time: { pomodoro.userBreak }
+              Your time: <strong>{ pomodoro.initialTime }</strong>
+            </StyledText>
+
+            <StyledText>
+              Your time: <strong>{ pomodoro.userBreak }</strong>
             </StyledText>
 
             <NavLink to={'/timer'}>
