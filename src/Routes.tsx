@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
 import { PomodoroTask } from './components/PomodoroTask';
 import { PomodoroTimer } from './components/PomodoroTimer';
+import { Page404 } from './components/404';
 
 type PropsType = { pomodoro: any };
 
@@ -13,12 +14,13 @@ export const Routes: React.FC<PropsType> = ({ pomodoro }) => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path={'/'} component={PomodoroTask} exact />
+        <Route path="/" component={PomodoroTask} exact />
+        <Route path="/404" component={Page404} />
         <Route
-          path={'/timer'}
-          render={() => isInvalidPomodoro() ? <Redirect to={'/'} /> : <PomodoroTimer />}
+          path="/timer"
+          render={() => isInvalidPomodoro() ? <Redirect to="/" /> : <PomodoroTimer />}
         />
-        <Redirect to={'/'} />
+        <Redirect to="/404" />
       </Switch>
     </BrowserRouter>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { Button, Input, StyledText } from '../styles';
 import { Context, defaultContext } from '../Context';
@@ -183,11 +183,11 @@ export const PomodoroTask: React.FC = () => {
               Your time: <strong>{ pomodoro.userBreak }</strong>
             </StyledText>
 
-            <NavLink to={'/timer'}>
+            <Link to={'/timer'}>
               <Button onClick={goHandler}>
                 Go!
               </Button>
-            </NavLink>
+            </Link>
           </div>)
       }
     </div>
