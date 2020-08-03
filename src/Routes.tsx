@@ -1,13 +1,11 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 
-import { PomodoroTask } from './components/PomodoroTask';
-import { PomodoroTimer } from './components/PomodoroTimer';
+import { PomodoroTask } from './pages/PomodoroTask';
+import { PomodoroTimer } from './pages/PomodoroTimer';
 import { Page404 } from './components/404';
 
-type PropsType = { pomodoro: any };
-
-export const Routes: React.FC<PropsType> = ({ pomodoro }) => {
+export const Routes: React.FC<{ pomodoro: any }> = ({ pomodoro }) => {
   const isInvalidPomodoro: Function = (): boolean =>
     !(pomodoro.pomodoroCount || pomodoro.initialTime || pomodoro.userBreak || pomodoro.taskOutput);
 

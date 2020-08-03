@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Button, TimerText, StyledText } from '../styles';
-import { PomodoroBreak } from './PomodoroBreak';
+import { BreakTimer } from '../components/BreakTimer';
 import { Context, defaultContext } from '../Context';
 
 import { FieldTimeOutlined } from '@ant-design/icons';
@@ -61,7 +61,7 @@ export const PomodoroTimer: React.FC = () => {
           setShowBreakTime(true);
           setDisabledStartButton(false);
         }
-      }, 10);
+      }, 1000);
     }
   }
 
@@ -108,7 +108,7 @@ export const PomodoroTimer: React.FC = () => {
               <StyledText>{ pomodoro.taskOutput }</StyledText>
             </div>
           </>
-        : <PomodoroBreak
+        : <BreakTimer
             countdownUserBreak={countdownUserBreak}
             setCountdownUserBreak={setCountdownUserBreak}
             secondTimer={secondTimer}

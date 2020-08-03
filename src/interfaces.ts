@@ -7,7 +7,7 @@ export interface IContext {
 }
 // Pomodoro context interface
 
-// Pomodoro break interface
+// BreakTimer interface
 export interface IPomodoroBreak {
   countdownUserBreak: string,
   setCountdownUserBreak: Function,
@@ -17,4 +17,4 @@ export interface IPomodoroBreak {
   setShowBreakTime: Function,
   setCountdownInitialTime: Function,
 }
-// Pomodoro break interface
+// BreakTimer interface

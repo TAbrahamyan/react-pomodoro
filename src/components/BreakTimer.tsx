@@ -9,7 +9,7 @@ import { Modal } from 'antd';
 
 let userBreakInterval: ReturnType<typeof setInterval>;
 
-export const PomodoroBreak: React.FC<IPomodoroBreak> = ({
+export const BreakTimer: React.FC<IPomodoroBreak> = ({
   countdownUserBreak,
   setCountdownUserBreak,
   secondTimer,
@@ -65,7 +65,7 @@ export const PomodoroBreak: React.FC<IPomodoroBreak> = ({
             setShowBreakTime(false);
           }
         }
-      }, 10);
+      }, 1000);
     }
   }, []);
 
