@@ -6,7 +6,7 @@ import { Context, defaultContext } from './Context';
 import { Routes } from './Routes';
 
 import 'antd/dist/antd.css';
-import './scss/_index.scss';
+import './scss/app.scss';
 
 const App: React.FC = () => {
   const [ pomodoro, setPomodoro ] = React.useState<IContext>(defaultContext);

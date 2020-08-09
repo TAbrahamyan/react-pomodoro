@@ -5,7 +5,6 @@ import { BreakTimer } from '../components/BreakTimer';
 import { Context, defaultContext } from '../Context';
 
 import { FieldTimeOutlined } from '@ant-design/icons';
-import '../scss/components/_pomodoro_timer.scss';
 
 let initialTimeinterval: ReturnType<typeof setInterval>;
 

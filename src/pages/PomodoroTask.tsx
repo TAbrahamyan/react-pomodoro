@@ -6,7 +6,6 @@ import { Context, defaultContext } from '../Context';
 
 import { Rate, Modal } from 'antd';
 import { FieldTimeOutlined } from '@ant-design/icons';
-import '../scss/components/_pomodoro_task.scss';
 
 const chooseTime: string[] = [ '5', '10', '15', '20', '25' ];
 const chooseBreak: string[] = [ '5', '10', '30' ];
