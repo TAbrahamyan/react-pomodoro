@@ -78,7 +78,7 @@ export const PomodoroTimer: React.FC = () => {
 
   return (
     <div className="pomodoro__timer">
-      { !showBreakTime
+      {!showBreakTime
         ? <>
             <div>
               <TimerText>{ countdownInitialTime }:{ secondTimer }</TimerText>

@@ -3,9 +3,7 @@
 @import 'fonts';
 @import 'mixins';
 
-* {
-  font-family: 'Heebo' !important;
-}
+* { font-family: 'Heebo' !important }
 
 .pomodoro {
   background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5);
@@ -16,15 +14,9 @@
   height: $vhHeight;
 
   @keyframes gradient {
-    0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
+    0% { background-position: 0% 50% }
+    50% { background-position: 100% 50% }
+    100% { background-position: 0% 50% }
   }
 
   button {
@@ -33,9 +25,7 @@
     z-index: 1;
     transition: color $easeOutAnimation;
 
-    &:active {
-      transform: translateY(4px);
-    }
+    &:active { transform: translateY(4px) }
 
     &:after {
       content: '';
@@ -53,10 +43,7 @@
 
     &:hover {
       color: #fff;
-
-      &:after {
-        width: $fullWidth;
-      }
+      &:after { width: $fullWidth }
     }
   }
 }

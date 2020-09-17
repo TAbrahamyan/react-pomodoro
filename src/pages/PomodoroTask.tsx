@@ -93,7 +93,7 @@ export const PomodoroTask: React.FC = () => {
         <StyledText style={modalTextColor}>Do you want to continue?</StyledText>
       </Modal>
 
-      { !showChoosing
+      {!showChoosing
         ? (<>
             <StyledText large="true" bold="true">
               Write a task you want to focus on
@@ -111,7 +111,7 @@ export const PomodoroTask: React.FC = () => {
                 Add
               </Button>
             </div>
-          { pomodoro.taskOutput.length > 0 &&
+          {pomodoro.taskOutput.length > 0 &&
             <>
               <div className="pomodoro-count">
                 <StyledText>
@@ -128,7 +128,7 @@ export const PomodoroTask: React.FC = () => {
                 </div>
               </div>
 
-              { pomodoro.pomodoroCount !== 0 &&
+              {pomodoro.pomodoroCount !== 0 &&
                 <div className="task-content">
                   <StyledText>
                     Choose how many minutes you want to focus
@@ -148,7 +148,7 @@ export const PomodoroTask: React.FC = () => {
                 </div>
               }
 
-              { pomodoro.initialTime.length > 0 &&
+              {pomodoro.initialTime.length > 0 &&
                 <div className="break-content">
                   <StyledText>
                     Choose minutes of break

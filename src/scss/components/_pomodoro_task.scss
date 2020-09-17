@@ -22,9 +22,7 @@
     @include easeOutAnimation;
     @include easeOutKeyframes;
 
-    .choose-pomodoro-count {
-      @include flex-content;
-    }
+    .choose-pomodoro-count { @include flex-content }
   }
 
   .task-content {
@@ -34,9 +32,7 @@
     .choose-time {
       @include flex-content;
 
-      input {
-        width: 20%;
-      }
+      input { width: 20% }
     }
   }
 
@@ -44,8 +40,6 @@
     @include easeOutAnimation;
     @include easeOutKeyframes;
 
-    .choose-break {
-      @include flex-content;
-    }
+    .choose-break { @include flex-content }
   }
 }

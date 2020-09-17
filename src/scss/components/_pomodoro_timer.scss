@@ -8,9 +8,7 @@
 
   @include easeOutKeyframes;
 
-  &__buttons {
-    @include flex-content;
-  }
+  &__buttons { @include flex-content }
 
   .your-task {
     @include flex-content;
